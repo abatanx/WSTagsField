@@ -10,6 +10,7 @@ import UIKit
 
 open class WSTagView: UIView {
     fileprivate let textLabel = UILabel()
+	open var wsTag : WSTag
 
     open var displayText: String = "" {
         didSet {
@@ -78,10 +79,10 @@ open class WSTagView: UIView {
 
     open var selected: Bool = false {
         didSet {
-            if selected && !isFirstResponder {
+            if oldValue != selected && selected  && !isFirstResponder {
                 _ = becomeFirstResponder()
             } else
-            if !selected && isFirstResponder {
+            if oldValue != selected && !selected && isFirstResponder {
                 _ = resignFirstResponder()
             }
             updateContent(animated: true)
@@ -89,7 +90,10 @@ open class WSTagView: UIView {
     }
 
     public init(tag: WSTag) {
-        super.init(frame: CGRect.zero)
+		wsTag = tag
+
+		super.init(frame: CGRect.zero)
+
         self.backgroundColor = tintColor
         self.layer.cornerRadius = cornerRadius
         self.layer.masksToBounds = true
@@ -113,7 +117,10 @@ open class WSTagView: UIView {
     }
 
     public required init?(coder aDecoder: NSCoder) {
+		wsTag = WSTag("Not implemented")
+
         super.init(coder: aDecoder)
+
         assert(false, "Not implemented")
     }
 

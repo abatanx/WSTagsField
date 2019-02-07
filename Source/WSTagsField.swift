@@ -496,6 +496,40 @@ open class WSTagsField: UIScrollView {
         onDidSelectTagView?(self, tagView)
     }
 
+    open func selectTag(_ tag: String?)
+    {
+        if self.readOnly {
+            return
+        }
+
+        var selTagView : WSTagView?
+        tagViews.forEach {
+            if $0.wsTag.text != tag && $0.selected {
+                $0.selected = false
+                onDidUnselectTagView?(self, $0)
+            }
+            else if $0.wsTag.text == tag && !$0.selected
+            {
+                selTagView = $0
+            }
+        }
+
+        if let tagView = selTagView {
+            tagView.selected = true
+            onDidSelectTagView?(self, tagView)
+        }
+    }
+
+    open func selectTag(_ tag: WSTag) {
+        selectTag(tag.text)
+    }
+
+    open func selectedTags() -> [WSTag] {
+        return tagViews
+            .filter { $0.selected }
+            .map { tagView -> WSTag in tagView.wsTag }
+    }
+
     open func unselectAllTagViewsAnimated(_ animated: Bool = false) {
         tagViews.forEach {
             $0.selected = false
